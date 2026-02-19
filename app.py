@@ -3,8 +3,11 @@ from pathlib import Path
 import time
 import logging
 from datetime import datetime
+from io import BytesIO
+import textwrap
 import numpy as np
 import os
+import reportlab 
 
 import streamlit as st
 import torch
@@ -16,6 +19,8 @@ from streamlit_folium import st_folium
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 # Setup logging
 logging.basicConfig(
@@ -154,6 +159,54 @@ def predict(image: Image.Image, model, idx_to_label):
     return top_label, results
 
 
+def build_prediction_pdf(report: dict) -> bytes:
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    page_width, page_height = letter
+    x = 42
+    y = page_height - 46
+    line_height = 14
+
+    def draw_line(text: str, bold: bool = False):
+        nonlocal y
+        if y < 60:
+            c.showPage()
+            y = page_height - 46
+        c.setFont('Helvetica-Bold' if bold else 'Helvetica', 11)
+        c.drawString(x, y, text)
+        y -= line_height
+
+    def draw_wrapped(label: str, value: str):
+        wrapped = textwrap.wrap(value, width=90) or ['']
+        draw_line(f'{label}: {wrapped[0]}')
+        for extra in wrapped[1:]:
+            draw_line(f'    {extra}')
+
+    draw_line('MediSync FL Prediction Report', bold=True)
+    draw_line(f"Generated: {report.get('generated_at', 'N/A')}")
+    draw_line('')
+
+    draw_wrapped('Predicted Class', report.get('predicted_class', 'N/A'))
+    draw_wrapped('Confidence', report.get('confidence_percent', 'N/A'))
+    draw_wrapped('Threshold', report.get('threshold_percent', 'N/A'))
+    draw_wrapped('Inference Device', report.get('inference_device', 'N/A'))
+    draw_wrapped('Image Resolution', report.get('image_resolution', 'N/A'))
+    draw_wrapped('Image Brightness', report.get('image_brightness', 'N/A'))
+    draw_wrapped('Image Contrast', report.get('image_contrast', 'N/A'))
+    draw_line('')
+
+    draw_line('Top Predictions', bold=True)
+    for item in report.get('top_predictions', []):
+        draw_wrapped('-', item)
+
+    draw_line('')
+    draw_wrapped('Notes', report.get('notes', ''))
+
+    c.save()
+    buffer.seek(0)
+    return buffer.read()
+
+
 def main():
     st.set_page_config(page_title='MediSync FL India', layout='wide', initial_sidebar_state='expanded')
     logger.info('Application started')
@@ -164,21 +217,28 @@ def main():
     @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap');
 
     :root {
-        --ink: #0f172a;
-        --slate: #334155;
-        --teal: #0f766e;
-        --amber: #f59e0b;
-        --sky: #0ea5e9;
-        --paper: #ffffff;
-        --mist: rgba(255, 255, 255, 0.7);
+        --ink: #e2e8f0;
+        --slate: #cbd5f5;
+        --teal: #2dd4bf;
+        --amber: #fbbf24;
+        --sky: #38bdf8;
+        --paper: #0b1220;
+        --mist: rgba(15, 23, 42, 0.78);
     }
 
-    .stApp {
-        background: radial-gradient(1200px circle at 8% 10%, rgba(14, 165, 233, 0.12), transparent 50%),
-                    radial-gradient(900px circle at 90% 20%, rgba(245, 158, 11, 0.12), transparent 45%),
-                    linear-gradient(120deg, #fef3c7 0%, #e0f2fe 55%, #f5f5f4 100%);
+    .stApp,
+    [data-testid="stAppViewContainer"] {
+        background: radial-gradient(1200px circle at 8% 10%, rgba(56, 189, 248, 0.18), transparent 50%),
+                    radial-gradient(900px circle at 90% 20%, rgba(251, 191, 36, 0.12), transparent 45%),
+                    linear-gradient(120deg, #0b1220 0%, #0f172a 55%, #0b1220 100%);
+        background-attachment: fixed;
         font-family: 'Space Grotesk', sans-serif;
         color: var(--ink);
+    }
+
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, rgba(11, 18, 32, 0.98), rgba(15, 23, 42, 0.98));
+        border-right: 1px solid rgba(148, 163, 184, 0.2);
     }
 
     h1, h2, h3 {
@@ -188,8 +248,8 @@ def main():
     }
 
     .hero {
-        background: linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(14, 165, 233, 0.15));
-        border: 1px solid rgba(15, 118, 110, 0.25);
+        background: linear-gradient(135deg, rgba(45, 212, 191, 0.12), rgba(56, 189, 248, 0.15));
+        border: 1px solid rgba(148, 163, 184, 0.25);
         border-radius: 18px;
         padding: 20px 22px;
         box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
@@ -197,7 +257,7 @@ def main():
 
     .stat-card {
         background: var(--mist);
-        border: 1px solid rgba(15, 23, 42, 0.08);
+        border: 1px solid rgba(148, 163, 184, 0.2);
         border-radius: 16px;
         padding: 16px 18px;
         min-height: 110px;
@@ -225,10 +285,10 @@ def main():
     }
 
     .glass-panel {
-        background: rgba(255, 255, 255, 0.75);
+        background: rgba(15, 23, 42, 0.82);
         border-radius: 16px;
         padding: 16px 18px;
-        border: 1px solid rgba(15, 23, 42, 0.08);
+        border: 1px solid rgba(148, 163, 184, 0.2);
         box-shadow: 0 14px 26px rgba(15, 23, 42, 0.06);
     }
 
@@ -237,9 +297,9 @@ def main():
         padding: 4px 10px;
         border-radius: 999px;
         font-size: 12px;
-        color: #0f172a;
-        background: rgba(14, 165, 233, 0.18);
-        border: 1px solid rgba(14, 165, 233, 0.35);
+        color: #e2e8f0;
+        background: rgba(56, 189, 248, 0.18);
+        border: 1px solid rgba(56, 189, 248, 0.35);
         margin-right: 6px;
     }
 
@@ -260,18 +320,18 @@ def main():
         text-align: center;
     }
     .hospital-card {
-        background: rgba(255, 255, 255, 0.85);
+        background: rgba(15, 23, 42, 0.85);
         padding: 15px;
         border-radius: 8px;
-        border-left: 4px solid #0f766e;
+        border-left: 4px solid #2dd4bf;
         margin: 10px 0;
     }
     .status-training {
-        color: #b45309;
+        color: #fbbf24;
         font-weight: bold;
     }
     .status-ready {
-        color: #15803d;
+        color: #34d399;
         font-weight: bold;
     }
     </style>
@@ -475,6 +535,33 @@ def show_prediction_lab():
         if uploaded:
             image = Image.open(uploaded).convert('RGB')
             st.image(image, caption='Uploaded MRI', use_container_width=True)
+
+            image_np = np.array(image)
+            mean_luma = float(image_np.mean())
+            std_luma = float(image_np.std())
+            height, width = image_np.shape[:2]
+            aspect_ratio = width / max(height, 1)
+
+            st.markdown(
+                """
+                <div class="glass-panel">
+                    <strong>Image Quality Check</strong>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+            col_a, col_b, col_c = st.columns(3)
+            with col_a:
+                st.metric('Resolution', f'{width} x {height}')
+            with col_b:
+                st.metric('Avg Intensity', f'{mean_luma:.1f}')
+            with col_c:
+                st.metric('Contrast (Std)', f'{std_luma:.1f}')
+
+            if mean_luma < 40 or mean_luma > 210:
+                st.warning('Image brightness is extreme; results may be less reliable.')
+            if aspect_ratio < 0.6 or aspect_ratio > 1.7:
+                st.warning('Image aspect ratio is unusual; consider re-uploading a square crop.')
         else:
             st.markdown(
                 """
@@ -515,14 +602,48 @@ def show_prediction_lab():
 
     if uploaded:
         st.subheader('Prediction Results')
+
+        top_k = 3
+        confidence_threshold = 70
+
         with st.spinner('Analyzing...'):
             top_label, results = predict(image, model, idx_to_label)
 
         top_prob = results[top_label] * 100
         st.markdown(f"**Predicted Class:** {top_label.upper()}  ·  **Confidence:** {top_prob:.2f}%")
+        if top_prob < confidence_threshold:
+            st.warning('Confidence is below the selected threshold. Consider manual review.')
+
+        summary_col1, summary_col2, summary_col3 = st.columns(3)
+        with summary_col1:
+            st.metric('Top Prediction', top_label.title())
+        with summary_col2:
+            st.metric('Confidence', f'{top_prob:.2f}%')
+        with summary_col3:
+            st.metric('Inference Device', str(DEVICE).upper())
+
+        gauge = go.Figure(
+            go.Indicator(
+                mode='gauge+number',
+                value=top_prob,
+                number={'suffix': '%'},
+                gauge={
+                    'axis': {'range': [0, 100]},
+                    'bar': {'color': '#0f766e'},
+                    'steps': [
+                        {'range': [0, confidence_threshold], 'color': 'rgba(245, 158, 11, 0.35)'},
+                        {'range': [confidence_threshold, 100], 'color': 'rgba(14, 165, 233, 0.25)'}
+                    ]
+                }
+            )
+        )
+        gauge.update_layout(height=260, margin=dict(l=10, r=10, t=30, b=10))
+        st.plotly_chart(gauge, use_container_width=True)
 
         top_sorted = sorted(results.items(), key=lambda x: x[1], reverse=True)
-        for label, prob in top_sorted[:3]:
+        st.markdown('')
+        st.markdown('**Top Predictions**')
+        for label, prob in top_sorted[:top_k]:
             st.markdown(f"{label.title()} — {prob*100:.2f}%")
             st.progress(min(max(prob, 0.0), 1.0))
 
@@ -535,6 +656,35 @@ def show_prediction_lab():
             color_continuous_scale='Teal'
         )
         st.plotly_chart(fig, use_container_width=True)
+
+        result_df = pd.DataFrame(
+            {
+                'Class': [label.title() for label, _ in top_sorted],
+                'Probability (%)': [round(prob * 100, 2) for _, prob in top_sorted]
+            }
+        )
+        st.dataframe(result_df, use_container_width=True)
+
+        report_payload = {
+            'generated_at': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC'),
+            'predicted_class': top_label.upper(),
+            'confidence_percent': f'{top_prob:.2f}%',
+            'threshold_percent': f'{confidence_threshold:.0f}%',
+            'inference_device': str(DEVICE).upper(),
+            'image_resolution': f'{width} x {height}',
+            'image_brightness': f'{mean_luma:.1f}',
+            'image_contrast': f'{std_luma:.1f}',
+            'top_predictions': [f"{label.title()}: {prob*100:.2f}%" for label, prob in top_sorted],
+            'notes': 'Federated model inference. This report is for clinical review support only.'
+        }
+
+        pdf_bytes = build_prediction_pdf(report_payload)
+        st.download_button(
+            label='Download prediction report (PDF)',
+            data=pdf_bytes,
+            file_name='prediction_report.pdf',
+            mime='application/pdf'
+        )
 
     st.markdown('---')
     st.info('This prediction is generated by a federated model trained across 3 hospitals without sharing raw patient data.')
@@ -775,8 +925,8 @@ def show_privacy_compliance():
     
     st.subheader('Audit Log (Last 5 Events)')
     audit_data = {
-        'Timestamp': ['2026-02-19 11:15:00', '2026-02-19 11:10:00', '2026-02-19 11:05:00', '2026-02-19 11:00:00', '2026-02-19 10:55:00'],
-        'Event': ['Model aggregation completed', 'NIMHANS uploaded gradients', 'Tata Memorial uploaded gradients', 'AIIMS Delhi started training', 'Round 12 initiated'],
+        'Timestamp': ['2026-02-19 10:40:00', '2026-02-19 10:20:00', '2026-02-19 10:00:00', '2026-02-19 09:40:00', '2026-02-19 09:20:00'],
+        'Event': ['Model aggregation completed', 'NIMHANS uploaded gradients', 'Tata Memorial uploaded gradients', 'AIIMS Delhi completed epoch 12', 'Round 12 initiated'],
         'Status': ['✅ Success', '✅ Success', '✅ Success', '✅ Success', '✅ Success']
     }
     st.dataframe(pd.DataFrame(audit_data), use_container_width=True)
