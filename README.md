@@ -1,165 +1,365 @@
-# Image Analysis using Federated Learning (v1)
+# MediSync FL — Brain Tumor MRI Classification via Federated Learning
 
-This repository simulates a federated learning workflow for brain tumor MRI classification across three Indian hospitals. Data stays local to each hospital dataset, and a global model is trained on aggregated knowledge. A Streamlit dashboard visualizes hospital stats, model metrics, and inference using artifacts produced by the training notebook.
+**Live Demo:** [medisync-fl.streamlit.app](https://medisync-fl.streamlit.app)
 
-## Technical Overview
+MediSync FL simulates a privacy-preserving federated learning workflow for brain tumor MRI classification across multiple geographically distributed hospitals. Patient data never leaves each hospital's local dataset. Instead, model updates are aggregated into a shared global model using a FedAvg-style approach, enabling collaborative learning without centralizing sensitive medical images.
 
-- Task: Brain tumor MRI classification (glioma, meningioma, pituitary, notumor)
-- Datasets: 3 hospital datasets (AIIMS Delhi, NIMHANS Bengaluru, Tata Memorial Mumbai)
-- Model: ResNet18 trained from scratch (weights=None)
-- Input: 224x224 RGB images, ImageNet normalization
-- Loss: CrossEntropyLoss
-- Optimizer: Adam
-- Split: Train/Val/Test derived from stratified sampling in notebook
-- Artifacts: Run-scoped JSON files in artifacts/run-### plus model files in models/
-- Logging: Each run writes logs to logs/<timestamp>/training.log
-- Dashboard: Streamlit app reads latest run artifacts and model metadata
+---
 
-## Current Metrics (Latest Run)
+## Table of Contents
 
-These values are read from models/model_meta.json (example run already committed):
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Model & Training Details](#model--training-details)
+- [Performance](#performance)
+- [Repository Structure](#repository-structure)
+- [Dataset Structure](#dataset-structure)
+- [Local Setup](#local-setup)
+- [Running the Training Notebook](#running-the-training-notebook)
+- [Running the Dashboard](#running-the-dashboard)
+- [Artifact Schemas](#artifact-schemas)
+- [Extending to Additional Hospitals](#extending-to-additional-hospitals)
+- [Known Limitations (v1)](#known-limitations-v1)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
 
-- Test Accuracy: 78.24%
-- Avg F1: 81.60%
-- Avg Precision: 82.18%
-- Avg Recall: 81.34%
-- Best Val Accuracy: 79.72%
+---
 
-Per-class metrics and confusion matrix are stored in models/model_meta.json and rendered in the dashboard.
+## Overview
 
-## Repository Layout
+Brain tumor diagnosis relies on MRI imaging, and training robust classification models typically requires large, diverse datasets. In practice, patient data is siloed across hospitals due to privacy regulations (e.g., DPDPA, HIPAA). This project demonstrates how federated learning can address that constraint by:
 
-- notebook.ipynb: End-to-end data audit, training, evaluation, and artifact generation
-- app.py: Streamlit dashboard reading artifacts and model files
-- dataset/: Hospital datasets (see expected structure below)
-- models/: Model weights and metadata
-- artifacts/: Run-scoped training artifacts (run-001, run-002, ...)
-- logs/: Time-stamped log folders (one per run)
-- architecture.md: System overview
+- Keeping raw MRI data local to each participating hospital
+- Training hospital-specific local models on their respective datasets
+- Aggregating local model weights into a single global model
+- Providing a Streamlit dashboard for visualizing hospital statistics, training metrics, and running inference on new images
 
-## Expected Dataset Structure
+The simulation uses three Indian hospital datasets: AIIMS Delhi, NIMHANS Bengaluru, and Tata Memorial Mumbai.
 
-Place the datasets under dataset/ with the following structure (case-sensitive folders are handled by normalization):
+**Classification targets:** glioma, meningioma, pituitary tumor, no tumor
 
-- dataset/dataset-1/
-  - glioma/
-  - meningioma/
-  - pituitary/
-  - notumor/
+---
 
-- dataset/dataset-2/
-  - glioma/
-  - meningioma/
-  - pituitary tumor/
-
-- dataset/dataset-3/Brain_Cancer raw MRI data/Brain_Cancer/
-  - brain_glioma/
-  - brain_menin/
-  - brain_tumor/
-
-The notebook includes a dataset audit that logs missing paths, folder names, and image counts. If no images are discovered, the run fails with a clear error.
-
-## Local Setup (macOS / Windows / Linux)
-
-### 1) Create and activate a virtual environment
-
-macOS / Linux:
+## Architecture
 
 ```
+┌─────────────────────┐    ┌──────────────────────┐    ┌─────────────────────┐
+│   Hospital 1        │    │   Hospital 2         │    │   Hospital 3        │
+│   AIIMS Delhi       │    │   NIMHANS Bengaluru  │    │   Tata Memorial     │
+│                     │    │                      │    │   Mumbai            │
+│  Local Dataset      │    │  Local Dataset       │    │  Local Dataset      │
+│  Local Training     │    │  Local Training      │    │  Local Training     │
+│  Model Weights      │    │  Model Weights       │    │  Model Weights      │
+└────────┬────────────┘    └──────────┬───────────┘    └───────────┬─────────┘
+         │                            │                            │
+         └────────────────────────────┼────────────────────────────┘
+                                      │
+                             ┌────────▼─────────┐
+                             │  Aggregation     │
+                             │  (FedAvg)        │
+                             │  Global Model    │
+                             └────────┬─────────┘
+                                      │
+                             ┌────────▼─────────┐
+                             │  Streamlit       │
+                             │  Dashboard       │
+                             │  + Inference     │
+                             └──────────────────┘
+```
+
+The notebook orchestrates the full pipeline: dataset auditing, local training per hospital, weight aggregation, global evaluation, and artifact generation. The Streamlit app consumes the artifacts produced by the latest notebook run.
+
+---
+
+## Model & Training Details
+
+| Parameter | Value |
+|---|---|
+| Base architecture | ResNet18 |
+| Pretrained weights | None (trained from scratch) |
+| Input size | 224 x 224 RGB |
+| Normalization | ImageNet mean/std |
+| Loss function | CrossEntropyLoss |
+| Optimizer | Adam |
+| Split strategy | Stratified train / val / test |
+| Aggregation | FedAvg (weight averaging across hospital models) |
+
+Training from scratch (no pretrained weights) avoids SSL certificate issues in restricted environments and ensures the model learns purely from the provided MRI datasets.
+
+---
+
+## Performance
+
+Metrics below are from the latest committed run, stored in `models/model_meta.json`.
+
+| Metric | Value |
+|---|---|
+| Test Accuracy | 78.24% |
+| Average F1 Score | 81.60% |
+| Average Precision | 82.18% |
+| Average Recall | 81.34% |
+| Best Validation Accuracy | 79.72% |
+
+Per-class precision, recall, F1, support, and a full confusion matrix are available in `models/model_meta.json` and rendered interactively in the dashboard.
+
+---
+
+## Repository Structure
+
+```
+.
+├── app.py                    # Streamlit dashboard
+├── notebook.ipynb            # End-to-end training and artifact generation
+├── architecture.md           # System design notes
+├── about-FL.md               # Federated learning background
+├── TASK.md                   # Project task specification
+├── app.log                   # Application log (latest session)
+├── dataset/
+│   ├── dataset-1/            # AIIMS Delhi
+│   ├── dataset-2/            # NIMHANS Bengaluru
+│   └── dataset-3/            # Tata Memorial Mumbai
+├── models/
+│   ├── global_model.pth      # Aggregated global model weights
+│   ├── label_map.json        # Class index to label mapping
+│   └── model_meta.json       # Training metadata and evaluation metrics
+├── artifacts/
+│   └── run-###/              # Scoped artifacts per training run
+│       ├── dataset_stats.json
+│       ├── dataset_splits.json
+│       └── training_history.json
+└── logs/
+    └── <timestamp>/
+        └── training.log      # Per-run training log
+```
+
+---
+
+## Dataset Structure
+
+Place hospital datasets under `dataset/` with the following layout. Folder name normalization is handled internally, but the structure must match.
+
+**dataset-1 (AIIMS Delhi)**
+```
+dataset/dataset-1/
+├── glioma/
+├── meningioma/
+├── pituitary/
+└── notumor/
+```
+
+**dataset-2 (NIMHANS Bengaluru)**
+```
+dataset/dataset-2/
+├── glioma/
+├── meningioma/
+└── pituitary tumor/
+```
+
+**dataset-3 (Tata Memorial Mumbai)**
+```
+dataset/dataset-3/Brain_Cancer raw MRI data/Brain_Cancer/
+├── brain_glioma/
+├── brain_menin/
+└── brain_tumor/
+```
+
+The notebook runs a dataset audit at startup that logs missing paths, unmatched folder names, and per-class image counts. If no valid images are found, the run exits with a descriptive error.
+
+---
+
+## Local Setup
+
+### Prerequisites
+
+- Python 3.9 or higher
+- pip
+- (Optional) CUDA-capable GPU for faster training
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/vansh-09/Image-Analysis-using-Federated-Learning.git
+cd Image-Analysis-using-Federated-Learning
+```
+
+### 2. Create a Virtual Environment
+
+**macOS / Linux**
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-Windows (PowerShell):
-
-```
+**Windows (PowerShell)**
+```powershell
 python -m venv .venv
-\.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 ```
 
-### 2) Install dependencies
+### 3. Install Dependencies
 
-```
+```bash
 pip install -U pip
 pip install torch torchvision torchaudio
 pip install streamlit folium streamlit-folium plotly pandas scikit-learn pillow
 ```
 
-Notes:
+For GPU-accelerated training, install the correct PyTorch build for your CUDA version from [pytorch.org](https://pytorch.org/get-started/locally/).
 
-- If you have a CUDA-capable GPU, install the correct PyTorch build from https://pytorch.org.
-- The project trains from scratch to avoid SSL issues when downloading weights.
+### 4. Add Datasets
 
-### 3) Run training (notebook)
+Download and place the MRI datasets under `dataset/` following the structure described above. The training notebook will validate their presence and log any discrepancies before training begins.
 
-Open notebook.ipynb and run all cells in order.
+---
 
-Outputs:
+## Running the Training Notebook
 
-- models/global_model.pth
-- models/label_map.json
-- models/model_meta.json
-- artifacts/run-###/dataset_stats.json
-- artifacts/run-###/dataset_splits.json
-- artifacts/run-###/training_history.json
-- logs/<timestamp>/training.log
+Open `notebook.ipynb` in JupyterLab or VS Code and run all cells in sequence.
 
-### 4) Run the dashboard
+```bash
+jupyter notebook notebook.ipynb
+```
+
+The notebook will:
+
+1. Audit all three hospital datasets and log findings
+2. Perform stratified train/val/test splitting
+3. Train a local ResNet18 model per hospital
+4. Aggregate weights using FedAvg to produce the global model
+5. Evaluate the global model on the held-out test split
+6. Write all artifacts and logs to scoped output directories
+
+**Outputs produced:**
 
 ```
+models/global_model.pth
+models/label_map.json
+models/model_meta.json
+artifacts/run-<N>/dataset_stats.json
+artifacts/run-<N>/dataset_splits.json
+artifacts/run-<N>/training_history.json
+logs/<timestamp>/training.log
+```
+
+Each run increments the run counter, preserving historical artifacts.
+
+---
+
+## Running the Dashboard
+
+```bash
 streamlit run app.py
 ```
 
-The dashboard automatically reads the latest artifacts run folder.
+The dashboard automatically detects and loads the latest run folder from `artifacts/`. It provides:
 
-## Training on More Datasets
+- Hospital-level dataset statistics and geographic distribution
+- Epoch-wise training and validation loss/accuracy curves
+- Global model evaluation metrics and confusion matrix
+- Real-time inference: upload an MRI image and receive a class prediction with confidence scores
 
-To add another hospital dataset:
+> If you encounter a Streamlit file watcher error, ensure `.streamlit/config.toml` has file watching disabled.
 
-1. Add a new entry in DATASETS and HOSPITAL_CONFIGS in notebook.ipynb
-2. Ensure the class folder names map to the standard labels (glioma, meningioma, pituitary, notumor)
-3. Re-run the notebook to generate a new run folder
+---
 
-Tips:
+## Artifact Schemas
 
-- If folder names do not match, the audit log will list unmatched folders
-- Update class_map for the new dataset to align names
+### `models/model_meta.json`
 
-## Artifacts and Schemas
+```json
+{
+  "trained_at": "<ISO 8601 timestamp>",
+  "num_classes": 4,
+  "num_epochs": "<int>",
+  "best_epoch": "<int>",
+  "device": "cpu | cuda",
+  "datasets": {
+    "<hospital_name>": {
+      "total": "<int>",
+      "class_distribution": { "<class>": "<int>" },
+      "location": { "lat": "<float>", "lon": "<float>" }
+    }
+  },
+  "metrics": {
+    "test_accuracy": "<float>",
+    "avg_f1": "<float>",
+    "avg_precision": "<float>",
+    "avg_recall": "<float>",
+    "best_val_accuracy": "<float>",
+    "per_class": {
+      "<class>": {
+        "precision": "<float>",
+        "recall": "<float>",
+        "f1": "<float>",
+        "support": "<int>"
+      }
+    },
+    "confusion_matrix": "<list[list[int]]>"
+  }
+}
+```
 
-models/model_meta.json
+### `artifacts/run-<N>/training_history.json`
 
-- trained_at (ISO timestamp)
-- num_classes, num_epochs, best_epoch
-- device
-- datasets: per-hospital totals, class distribution, and location metadata
-- metrics:
-  - test_accuracy, avg_f1, avg_precision, avg_recall
-  - per_class (precision, recall, f1, support)
-  - confusion_matrix
-  - best_val_accuracy
+```json
+[
+  {
+    "epoch": "<int>",
+    "train_loss": "<float>",
+    "train_accuracy": "<float>",
+    "val_loss": "<float>",
+    "val_accuracy": "<float>"
+  }
+]
+```
 
-artifacts/run-###/dataset_stats.json
+### `artifacts/run-<N>/dataset_stats.json`
 
-- Per-hospital totals and class distribution
-- Mirrors dataset metadata used by the dashboard
+Per-hospital image totals and class distribution, mirroring the `datasets` block in `model_meta.json`.
 
-artifacts/run-###/training_history.json
+---
 
-- Epoch-wise metrics: train_loss, train_accuracy, val_loss, val_accuracy
+## Extending to Additional Hospitals
 
-## Known Constraints in v1
+To onboard a new hospital dataset:
 
-- Single global model (no true federated server/client exchange)
-- CPU training is slow for large datasets
-- No differential privacy or encryption in v1
+1. Add a new entry to the `DATASETS` and `HOSPITAL_CONFIGS` dictionaries in `notebook.ipynb`.
+2. Map the hospital's folder names to the canonical label set (`glioma`, `meningioma`, `pituitary`, `notumor`) using the `class_map` configuration for that dataset.
+3. Re-run the notebook. A new run folder will be created, and the global model will be retrained with the additional hospital's data included in aggregation.
+
+If folder names do not match the expected labels, the dataset audit log will list all unresolved folders so they can be remapped before training.
+
+---
+
+## Known Limitations (v1)
+
+- **Simulated federation:** There is no actual server/client network exchange. Local training and aggregation occur sequentially within the notebook on a single machine.
+- **No privacy guarantees:** Differential privacy, gradient clipping, and secure aggregation are not implemented in this version.
+- **CPU training time:** Training from scratch on CPU is slow for large datasets. GPU is strongly recommended for full runs.
+- **Single aggregation round:** The current implementation performs one round of FedAvg. Multi-round iterative federation is planned for v2.
+
+---
 
 ## Troubleshooting
 
-- Zero images discovered: Check dataset paths and folder names in logs/<timestamp>/training.log
-- Streamlit file watcher error: .streamlit/config.toml disables file watching
-- SSL certificate errors: ResNet18 uses weights=None to avoid downloads
+**Zero images discovered during dataset audit**
+Check the dataset paths and folder names. The audit output in `logs/<timestamp>/training.log` will list all paths it attempted to read.
+
+**Streamlit file watcher error on startup**
+Ensure `.streamlit/config.toml` exists and contains:
+```toml
+[server]
+fileWatcherType = "none"
+```
+
+**SSL certificate errors when loading model weights**
+The project uses `weights=None` for ResNet18 to avoid any remote weight downloads. If this error appears, verify that no other part of the code is calling a pretrained model endpoint.
+
+**CUDA out of memory**
+Reduce the batch size in the training configuration within `notebook.ipynb`.
+
+---
 
 ## License
 
-Internal academic use
+This project is intended for academic and research use. See repository for full license details.
