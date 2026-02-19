@@ -1,0 +1,188 @@
+2026-02-19 17:30:09,575 - INFO - Application started
+2026-02-19 17:30:09,575 - INFO - Application started
+2026-02-19 17:30:09,575 - INFO - Application started
+2026-02-19 17:30:09,584 - INFO - Loaded dataset statistics
+2026-02-19 17:30:09,585 - INFO - Loaded dataset statistics
+2026-02-19 17:30:09,586 - INFO - Loaded model metadata
+2026-02-19 17:30:09,593 - INFO - Loaded model metadata
+2026-02-19 17:30:10,392 - INFO - Loaded dataset statistics
+2026-02-19 17:30:10,465 - INFO - Loaded model metadata
+2026-02-19 17:30:13,357 - INFO - Application started
+2026-02-19 17:30:13,375 - INFO - Application started
+2026-02-19 17:30:13,380 - INFO - Loaded dataset statistics
+2026-02-19 17:30:13,386 - INFO - Loaded model metadata
+2026-02-19 17:30:13,408 - INFO - Loaded dataset statistics
+2026-02-19 17:30:13,450 - INFO - Loaded model metadata
+2026-02-19 17:30:13,525 - INFO - Application started
+2026-02-19 17:30:13,540 - INFO - Loaded dataset statistics
+2026-02-19 17:30:13,546 - INFO - Loaded model metadata
+2026-02-19 17:30:15,696 - INFO - Application started
+2026-02-19 17:30:15,765 - INFO - Loaded dataset statistics
+2026-02-19 17:30:15,772 - INFO - Loaded model metadata
+2026-02-19 17:30:17,219 - INFO - Application started
+2026-02-19 17:30:17,226 - INFO - Loaded dataset statistics
+2026-02-19 17:30:17,228 - INFO - Loaded model metadata
+2026-02-19 17:30:19,452 - INFO - Application started
+2026-02-19 17:30:19,455 - INFO - Loaded dataset statistics
+2026-02-19 17:30:19,456 - INFO - Loaded model metadata
+2026-02-19 17:30:33,150 - INFO - Application started
+2026-02-19 17:30:33,152 - INFO - Loaded dataset statistics
+2026-02-19 17:30:33,153 - INFO - Loaded model metadata
+2026-02-19 17:30:33,666 - INFO - Application started
+2026-02-19 17:30:33,670 - INFO - Loaded dataset statistics
+2026-02-19 17:30:33,670 - INFO - Loaded model metadata
+2026-02-19 17:30:39,063 - INFO - Application started
+2026-02-19 17:30:39,069 - INFO - Loaded label map
+2026-02-19 17:30:39,405 - INFO - Loaded trained model weights
+2026-02-19 17:30:45,450 - INFO - Application started
+2026-02-19 17:30:45,518 - INFO - Running inference on uploaded image
+2026-02-19 17:30:45,627 - INFO - Prediction: glioma (55.25%)
+2026-02-19 17:31:06,401 - INFO - Application started
+2026-02-19 17:31:09,525 - INFO - Application started
+2026-02-19 17:31:09,529 - INFO - Loaded training history
+2026-02-19 17:31:09,530 - INFO - Loaded model metadata
+2026-02-19 17:31:09,531 - INFO - Loaded dataset statistics
+2026-02-19 17:32:23,185 - INFO - Application started
+2026-02-19 17:32:23,189 - INFO - Loaded dataset statistics
+2026-02-19 17:32:23,189 - INFO - Loaded model metadata
+2026-02-19 17:32:23,620 - INFO - Application started
+2026-02-19 17:32:23,624 - INFO - Loaded dataset statistics
+2026-02-19 17:32:23,624 - INFO - Loaded model metadata
+2026-02-19 17:32:25,983 - INFO - Application started
+2026-02-19 17:32:25,987 - INFO - Loaded dataset statistics
+2026-02-19 17:32:25,988 - INFO - Loaded model metadata
+2026-02-19 17:32:27,440 - INFO - Application started
+2026-02-19 17:32:27,442 - INFO - Loaded training history
+2026-02-19 17:32:27,442 - INFO - Loaded model metadata
+2026-02-19 17:32:27,443 - INFO - Loaded dataset statistics
+2026-02-19 17:32:32,996 - INFO - Application started
+2026-02-19 17:32:37,344 - INFO - Application started
+2026-02-19 17:32:38,493 - INFO - Application started
+2026-02-19 17:32:57,856 - INFO - Application started
+2026-02-19 17:32:57,861 - INFO - Loaded dataset statistics
+2026-02-19 17:32:57,862 - INFO - Loaded model metadata
+2026-02-19 17:32:58,446 - INFO - Application started
+2026-02-19 17:32:58,451 - INFO - Loaded dataset statistics
+2026-02-19 17:32:58,451 - INFO - Loaded model metadata
+2026-02-19 17:32:59,655 - INFO - Application started
+2026-02-19 17:33:09,900 - INFO - Application started
+2026-02-19 17:33:11,461 - INFO - Application started
+2026-02-19 17:34:19,372 - INFO - Application started
+2026-02-19 17:34:19,377 - INFO - Loaded dataset statistics
+2026-02-19 17:34:19,378 - INFO - Loaded model metadata
+2026-02-19 17:34:19,729 - INFO - Application started
+2026-02-19 17:34:19,731 - INFO - Loaded dataset statistics
+2026-02-19 17:34:19,732 - INFO - Loaded model metadata
+2026-02-19 17:34:20,680 - INFO - Application started
+2026-02-19 17:34:59,772 - INFO - Application started
+2026-02-19 17:34:59,775 - INFO - Loaded dataset statistics
+2026-02-19 17:34:59,775 - INFO - Loaded model metadata
+2026-02-19 17:35:00,048 - INFO - Application started
+2026-02-19 17:35:00,052 - INFO - Loaded dataset statistics
+2026-02-19 17:35:00,052 - INFO - Loaded model metadata
+2026-02-19 17:35:01,825 - INFO - Application started
+2026-02-19 17:35:01,827 - WARNING - Log file not found: /Users/vanshjain/Desktop/DEV/Image-Analysis-using-Federated-Learning/logs/training.log
+2026-02-19 17:35:03,695 - INFO - Application started
+2026-02-19 17:35:03,698 - INFO - Displayed 85 log lines for Application Log
+2026-02-19 17:35:14,545 - INFO - Application started
+2026-02-19 17:35:14,551 - INFO - Displayed 1 log lines for Application Log
+2026-02-19 17:35:16,779 - INFO - Application started
+2026-02-19 17:35:16,785 - INFO - Displayed 0 log lines for Application Log
+2026-02-19 17:35:19,151 - INFO - Application started
+2026-02-19 17:35:19,157 - INFO - Displayed 0 log lines for Application Log
+2026-02-19 17:35:23,320 - INFO - Application started
+2026-02-19 17:35:23,326 - INFO - Displayed 92 log lines for Application Log
+2026-02-19 17:35:39,392 - INFO - Application started
+2026-02-19 17:35:39,397 - INFO - Loaded training history
+2026-02-19 17:35:39,398 - INFO - Loaded model metadata
+2026-02-19 17:35:39,398 - INFO - Loaded dataset statistics
+2026-02-19 17:35:51,720 - INFO - Application started
+2026-02-19 17:35:51,724 - INFO - Loaded label map
+2026-02-19 17:35:52,017 - INFO - Loaded trained model weights
+2026-02-19 17:35:55,220 - INFO - Application started
+2026-02-19 17:35:55,224 - INFO - Loaded dataset statistics
+2026-02-19 17:35:55,224 - INFO - Loaded model metadata
+2026-02-19 17:35:55,504 - INFO - Application started
+2026-02-19 17:35:55,505 - INFO - Loaded dataset statistics
+2026-02-19 17:35:55,506 - INFO - Loaded model metadata
+2026-02-19 17:35:56,975 - INFO - Application started
+2026-02-19 17:35:56,977 - INFO - Loaded dataset statistics
+2026-02-19 17:35:56,978 - INFO - Loaded model metadata
+2026-02-19 17:35:57,339 - INFO - Application started
+2026-02-19 17:35:57,342 - INFO - Loaded dataset statistics
+2026-02-19 17:35:57,342 - INFO - Loaded model metadata
+2026-02-19 17:36:34,077 - INFO - Application started
+2026-02-19 17:36:34,084 - INFO - Loaded dataset statistics
+2026-02-19 17:36:34,085 - INFO - Loaded model metadata
+2026-02-19 17:36:34,303 - INFO - Application started
+2026-02-19 17:36:34,305 - INFO - Loaded dataset statistics
+2026-02-19 17:36:34,305 - INFO - Loaded model metadata
+2026-02-19 17:36:37,312 - INFO - Application started
+2026-02-19 17:36:37,314 - INFO - Loaded dataset statistics
+2026-02-19 17:36:37,314 - INFO - Loaded model metadata
+2026-02-19 17:36:39,163 - INFO - Application started
+2026-02-19 17:36:39,165 - INFO - Loaded dataset statistics
+2026-02-19 17:36:39,166 - INFO - Loaded model metadata
+2026-02-19 17:36:41,120 - INFO - Application started
+2026-02-19 17:36:41,123 - INFO - Loaded dataset statistics
+2026-02-19 17:36:41,123 - INFO - Loaded model metadata
+2026-02-19 17:36:42,627 - INFO - Application started
+2026-02-19 17:36:42,629 - INFO - Loaded dataset statistics
+2026-02-19 17:36:42,629 - INFO - Loaded model metadata
+2026-02-19 17:36:44,094 - INFO - Application started
+2026-02-19 17:36:44,096 - INFO - Loaded dataset statistics
+2026-02-19 17:36:44,096 - INFO - Loaded model metadata
+2026-02-19 17:40:57,217 - INFO - Application started
+2026-02-19 17:40:57,226 - INFO - Loaded dataset statistics
+2026-02-19 17:40:57,226 - INFO - Loaded model metadata
+2026-02-19 17:40:57,568 - INFO - Application started
+2026-02-19 17:40:57,571 - INFO - Loaded dataset statistics
+2026-02-19 17:40:57,572 - INFO - Loaded model metadata
+2026-02-19 17:41:00,415 - INFO - Application started
+2026-02-19 17:41:00,418 - INFO - Loaded dataset statistics
+2026-02-19 17:41:00,419 - INFO - Loaded model metadata
+2026-02-19 17:41:01,171 - INFO - Application started
+2026-02-19 17:41:01,174 - INFO - Loaded dataset statistics
+2026-02-19 17:41:01,174 - INFO - Loaded model metadata
+2026-02-19 17:41:11,853 - INFO - Application started
+2026-02-19 17:41:11,857 - INFO - Loaded label map
+2026-02-19 17:41:12,156 - INFO - Loaded trained model weights
+2026-02-19 17:41:12,159 - INFO - Loaded model metadata
+2026-02-19 17:41:12,159 - INFO - Loaded dataset statistics
+2026-02-19 17:41:16,941 - INFO - Application started
+2026-02-19 17:41:16,944 - INFO - Loaded model metadata
+2026-02-19 17:41:16,945 - INFO - Loaded dataset statistics
+2026-02-19 17:41:16,969 - INFO - Running inference on uploaded image
+2026-02-19 17:41:17,044 - INFO - Prediction: glioma (78.78%)
+2026-02-19 17:41:22,889 - INFO - Application started
+2026-02-19 17:41:22,893 - INFO - Loaded training history
+2026-02-19 17:41:22,893 - INFO - Loaded model metadata
+2026-02-19 17:41:22,893 - INFO - Loaded dataset statistics
+2026-02-19 17:41:26,471 - INFO - Application started
+2026-02-19 17:41:31,873 - INFO - Application started
+2026-02-19 17:41:31,875 - INFO - Loaded dataset statistics
+2026-02-19 17:41:31,875 - INFO - Loaded model metadata
+2026-02-19 17:41:32,113 - INFO - Application started
+2026-02-19 17:41:32,115 - INFO - Loaded dataset statistics
+2026-02-19 17:41:32,115 - INFO - Loaded model metadata
+2026-02-19 17:41:34,236 - INFO - Application started
+2026-02-19 17:41:34,239 - INFO - Loaded dataset statistics
+2026-02-19 17:41:34,239 - INFO - Loaded model metadata
+2026-02-19 17:41:34,564 - INFO - Application started
+2026-02-19 17:41:34,567 - INFO - Loaded dataset statistics
+2026-02-19 17:41:34,567 - INFO - Loaded model metadata
+2026-02-19 17:41:34,902 - INFO - Application started
+2026-02-19 17:41:34,905 - INFO - Loaded dataset statistics
+2026-02-19 17:41:34,905 - INFO - Loaded model metadata
+2026-02-19 17:41:35,230 - INFO - Application started
+2026-02-19 17:41:35,232 - INFO - Loaded dataset statistics
+2026-02-19 17:41:35,233 - INFO - Loaded model metadata
+2026-02-19 17:41:35,562 - INFO - Application started
+2026-02-19 17:41:35,564 - INFO - Loaded dataset statistics
+2026-02-19 17:41:35,565 - INFO - Loaded model metadata
+2026-02-19 17:41:35,893 - INFO - Application started
+2026-02-19 17:41:35,896 - INFO - Loaded dataset statistics
+2026-02-19 17:41:35,896 - INFO - Loaded model metadata
+2026-02-19 17:41:37,181 - INFO - Application started
+2026-02-19 17:41:37,184 - INFO - Loaded dataset statistics
+2026-02-19 17:41:37,184 - INFO - Loaded model metadata

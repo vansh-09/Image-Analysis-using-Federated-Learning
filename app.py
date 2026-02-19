@@ -3,6 +3,8 @@ from pathlib import Path
 import time
 import logging
 from datetime import datetime
+import numpy as np
+import os
 
 import streamlit as st
 import torch
@@ -29,6 +31,7 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = Path('.').resolve()
 MODEL_DIR = PROJECT_ROOT / 'models'
 ARTIFACTS_DIR = PROJECT_ROOT / 'artifacts'
+LOGS_DIR = PROJECT_ROOT / 'logs'
 
 def get_latest_run_dir(root: Path):
     runs = []
@@ -45,6 +48,7 @@ def get_latest_run_dir(root: Path):
 
 RUN_DIR = get_latest_run_dir(ARTIFACTS_DIR)
 ACTIVE_ARTIFACTS_DIR = RUN_DIR if RUN_DIR else ARTIFACTS_DIR
+LATEST_LOG_DIR = get_latest_run_dir(LOGS_DIR)
 
 MODEL_PATH = MODEL_DIR / 'global_model.pth'
 LABEL_MAP_PATH = MODEL_DIR / 'label_map.json'
@@ -59,6 +63,20 @@ TRANSFORM = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
+
+
+def render_stat_card(title: str, value: str, subtitle: str = ''):
+    subtitle_html = f"<div class='stat-sub'>{subtitle}</div>" if subtitle else ''
+    st.markdown(
+        f"""
+        <div class="stat-card fade-in">
+            <div class="stat-title">{title}</div>
+            <div class="stat-value">{value}</div>
+            {subtitle_html}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 def load_label_map():
@@ -143,26 +161,117 @@ def main():
     # Custom CSS
     st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+    :root {
+        --ink: #0f172a;
+        --slate: #334155;
+        --teal: #0f766e;
+        --amber: #f59e0b;
+        --sky: #0ea5e9;
+        --paper: #ffffff;
+        --mist: rgba(255, 255, 255, 0.7);
+    }
+
+    .stApp {
+        background: radial-gradient(1200px circle at 8% 10%, rgba(14, 165, 233, 0.12), transparent 50%),
+                    radial-gradient(900px circle at 90% 20%, rgba(245, 158, 11, 0.12), transparent 45%),
+                    linear-gradient(120deg, #fef3c7 0%, #e0f2fe 55%, #f5f5f4 100%);
+        font-family: 'Space Grotesk', sans-serif;
+        color: var(--ink);
+    }
+
+    h1, h2, h3 {
+        font-family: 'Fraunces', serif;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(14, 165, 233, 0.15));
+        border: 1px solid rgba(15, 118, 110, 0.25);
+        border-radius: 18px;
+        padding: 20px 22px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .stat-card {
+        background: var(--mist);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 16px;
+        padding: 16px 18px;
+        min-height: 110px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .stat-title {
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--slate);
+    }
+
+    .stat-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--ink);
+        margin-top: 6px;
+    }
+
+    .stat-sub {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--slate);
+    }
+
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.75);
+        border-radius: 16px;
+        padding: 16px 18px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        box-shadow: 0 14px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    .pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        color: #0f172a;
+        background: rgba(14, 165, 233, 0.18);
+        border: 1px solid rgba(14, 165, 233, 0.35);
+        margin-right: 6px;
+    }
+
+    .fade-in {
+        animation: fadeInUp 0.6s ease both;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
         padding: 20px;
         border-radius: 10px;
         color: white;
         text-align: center;
     }
     .hospital-card {
-        background: #f8f9fa;
+        background: rgba(255, 255, 255, 0.85);
         padding: 15px;
         border-radius: 8px;
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #0f766e;
         margin: 10px 0;
     }
     .status-training {
-        color: #f39c12;
+        color: #b45309;
         font-weight: bold;
     }
     .status-ready {
-        color: #27ae60;
+        color: #15803d;
         font-weight: bold;
     }
     </style>
@@ -171,7 +280,7 @@ def main():
     # Sidebar Navigation
     st.sidebar.title('MediSync FL India')
     st.sidebar.markdown('---')
-    page = st.sidebar.radio('Navigate', ['Network Dashboard', 'Prediction Lab', 'Analytics Hub', 'Training Logs'])
+    page = st.sidebar.radio('Navigate', ['Network Dashboard', 'Prediction Lab', 'Analytics Hub', 'Privacy & Compliance'])
     
     if page == 'Network Dashboard':
         show_network_dashboard()
@@ -179,13 +288,13 @@ def main():
         show_prediction_lab()
     elif page == 'Analytics Hub':
         show_analytics_hub()
-    elif page == 'Training Logs':
-        show_training_logs()
+    elif page == 'Privacy & Compliance':
+        show_privacy_compliance()
 
 
 def show_network_dashboard():
     st.title('Federated Learning Network Dashboard')
-    st.markdown('**Real-time view of the India-wide brain tumor detection network**')
+    st.markdown('**Live view of the India-wide brain tumor detection network**')
     
     # Load real data
     dataset_stats = load_dataset_stats()
@@ -200,18 +309,45 @@ def show_network_dashboard():
     total_hospitals = len(dataset_stats)
     total_patients = meta.get('total_samples', 0)
     global_acc = meta['metrics']['test_accuracy'] * 100
+    best_val_acc = meta['metrics'].get('best_val_accuracy', 0) * 100
+    avg_f1 = meta['metrics'].get('avg_f1', 0) * 100
+    avg_precision = meta['metrics'].get('avg_precision', 0) * 100
+    avg_recall = meta['metrics'].get('avg_recall', 0) * 100
     num_epochs = meta.get('num_epochs', 0)
     best_epoch = meta.get('best_epoch', 0)
-    
+
+    st.markdown(
+        """
+        <div class="hero fade-in">
+            <div class="pill">Federated • Privacy-Preserving</div>
+            <div class="pill">Nationwide Brain MRI Network</div>
+            <div style="margin-top:8px; font-size:16px; color: var(--slate);">
+                Aggregated learning signals from distributed hospitals without sharing raw patient data.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown('')
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric('Total Hospitals', total_hospitals)
+        render_stat_card('Total Hospitals', f'{total_hospitals}', 'Active contributors')
     with col2:
-        st.metric('Total Patients', f'{total_patients:,}')
+        render_stat_card('Total Patients', f'{total_patients:,}', 'All cohorts combined')
     with col3:
-        st.metric('Global Model Accuracy', f'{global_acc:.2f}%')
+        render_stat_card('Test Accuracy', f'{global_acc:.2f}%', 'Global evaluation')
     with col4:
-        st.metric('Training Epochs', f'{best_epoch}/{num_epochs}')
+        render_stat_card('Best Val Accuracy', f'{best_val_acc:.2f}%', f'Epoch {best_epoch}/{num_epochs}')
+
+    col5, col6, col7 = st.columns(3)
+    with col5:
+        render_stat_card('Avg F1-Score', f'{avg_f1:.2f}%', 'Macro average')
+    with col6:
+        render_stat_card('Avg Precision', f'{avg_precision:.2f}%', 'Macro average')
+    with col7:
+        render_stat_card('Avg Recall', f'{avg_recall:.2f}%', 'Macro average')
     
     st.markdown('---')
     
@@ -233,7 +369,7 @@ def show_network_dashboard():
                 fillOpacity=0.6
             ).add_to(m)
         
-        st_folium(m, width=700, height=400)
+        map_result = st_folium(m, width=700, height=420)
     
     with col_info:
         st.subheader('Network Status')
@@ -246,8 +382,48 @@ def show_network_dashboard():
     
     st.markdown('---')
     
-    # Hospital details from real data
+    selected_hospital = None
+    if map_result and map_result.get('last_object_clicked'):
+        clicked = map_result['last_object_clicked']
+        lat = clicked.get('lat')
+        lng = clicked.get('lng')
+        for hospital, info in dataset_stats.items():
+            loc = info.get('location', [])
+            if len(loc) == 2 and abs(lat - loc[0]) < 0.01 and abs(lng - loc[1]) < 0.01:
+                selected_hospital = hospital
+                break
+
     st.subheader('Hospital Details')
+    if selected_hospital:
+        info = dataset_stats[selected_hospital]
+        st.markdown(
+            f"""
+            <div class="glass-panel fade-in">
+                <h3 style="margin-top:0;">{selected_hospital}</h3>
+                <div><strong>Specialty:</strong> {info['specialty']}</div>
+                <div><strong>Dataset ID:</strong> {info['dataset_id']}</div>
+                <div><strong>Total Samples:</strong> {info['total_samples']:,}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        class_dist_df = pd.DataFrame({
+            'Class': list(info['class_distribution'].keys()),
+            'Count': list(info['class_distribution'].values())
+        })
+        fig = px.bar(
+            class_dist_df,
+            x='Class',
+            y='Count',
+            title='Class Distribution',
+            color='Count',
+            color_continuous_scale='Teal'
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.info('Click a hospital marker on the map to view its dataset details.')
+
     for hospital, info in dataset_stats.items():
         with st.expander(f"{hospital} - {info['specialty']}", expanded=False):
             col1, col2 = st.columns(2)
@@ -266,43 +442,100 @@ def show_network_dashboard():
 def show_prediction_lab():
     st.title('Prediction Lab')
     st.markdown('**Upload an MRI scan to get a prediction from the global federated model**')
-    
+
     model, label_map, idx_to_label = load_model()
+    meta = load_model_meta()
+    dataset_stats = load_dataset_stats()
     if model is None:
         st.warning('Model not found. Run the training notebook to generate model artifacts.')
         logger.warning('Model not available for prediction')
         return
-    
-    col1, col2 = st.columns([1, 1])
-    
+
+    st.markdown(
+        """
+        <div class="hero fade-in">
+            <div class="pill">Real-time inference</div>
+            <div class="pill">Federated ResNet18</div>
+            <div style="margin-top:8px; color: var(--slate);">
+                The model aggregates knowledge from multiple hospitals while preserving patient privacy.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown('')
+
+    col1, col2 = st.columns([1.1, 0.9])
+
     with col1:
         st.subheader('Upload MRI Scan')
         uploaded = st.file_uploader('Choose an MRI image', type=['png', 'jpg', 'jpeg'])
-        
+
         if uploaded:
             image = Image.open(uploaded).convert('RGB')
             st.image(image, caption='Uploaded MRI', use_container_width=True)
-    
-    with col2:
-        if uploaded:
-            st.subheader('Prediction Results')
-            with st.spinner('Analyzing...'):
-                top_label, results = predict(image, model, idx_to_label)
-            
-            st.success(f'**Predicted Class:** {top_label.upper()}')
-            st.markdown(f'**Confidence:** {results[top_label]*100:.2f}%')
-            
-            st.markdown('---')
-            st.markdown('**Class Probabilities:**')
-            fig = px.bar(
-                x=list(results.keys()),
-                y=list(results.values()),
-                labels={'x': 'Class', 'y': 'Probability'},
-                color=list(results.values()),
-                color_continuous_scale='Viridis'
+        else:
+            st.markdown(
+                """
+                <div class="glass-panel">
+                    <strong>Tips for best results</strong>
+                    <ul>
+                        <li>Use axial MRI slices with clear tumor boundaries.</li>
+                        <li>Ensure the scan is well-lit and not cropped.</li>
+                        <li>PNG or high-quality JPEG works best.</li>
+                    </ul>
+                </div>
+                """,
+                unsafe_allow_html=True
             )
-            st.plotly_chart(fig, use_container_width=True)
-    
+
+    with col2:
+        st.subheader('Model Snapshot')
+        if meta:
+            st.markdown(
+                f"""
+                <div class="glass-panel">
+                    <div><strong>Trained at:</strong> {meta.get('trained_at', 'N/A')[:10]}</div>
+                    <div><strong>Best Epoch:</strong> {meta.get('best_epoch', 0)}/{meta.get('num_epochs', 0)}</div>
+                    <div><strong>Test Accuracy:</strong> {meta['metrics'].get('test_accuracy', 0)*100:.2f}%</div>
+                    <div><strong>Avg F1:</strong> {meta['metrics'].get('avg_f1', 0)*100:.2f}%</div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.info('Model metadata not found. Train the model to populate metrics.')
+
+        if dataset_stats:
+            total_samples = sum(info.get('total_samples', 0) for info in dataset_stats.values())
+            render_stat_card('Total Samples', f'{total_samples:,}', 'Across all hospitals')
+
+    st.markdown('---')
+
+    if uploaded:
+        st.subheader('Prediction Results')
+        with st.spinner('Analyzing...'):
+            top_label, results = predict(image, model, idx_to_label)
+
+        top_prob = results[top_label] * 100
+        st.markdown(f"**Predicted Class:** {top_label.upper()}  ·  **Confidence:** {top_prob:.2f}%")
+
+        top_sorted = sorted(results.items(), key=lambda x: x[1], reverse=True)
+        for label, prob in top_sorted[:3]:
+            st.markdown(f"{label.title()} — {prob*100:.2f}%")
+            st.progress(min(max(prob, 0.0), 1.0))
+
+        st.markdown('')
+        fig = px.bar(
+            x=[k for k, _ in top_sorted],
+            y=[v for _, v in top_sorted],
+            labels={'x': 'Class', 'y': 'Probability'},
+            color=[v for _, v in top_sorted],
+            color_continuous_scale='Teal'
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
     st.markdown('---')
     st.info('This prediction is generated by a federated model trained across 3 hospitals without sharing raw patient data.')
 
@@ -430,8 +663,12 @@ def show_training_logs():
     
     log_type = st.radio('Select Log Type', ['Training Log', 'Application Log'], horizontal=True)
     
-    log_file = 'training.log' if log_type == 'Training Log' else 'app.log'
-    log_path = os.path.join(BASE_DIR, log_file)
+    if log_type == 'Training Log':
+        log_file = 'training.log'
+        log_path = (LATEST_LOG_DIR / log_file) if LATEST_LOG_DIR else (LOGS_DIR / log_file)
+    else:
+        log_file = 'app.log'
+        log_path = PROJECT_ROOT / log_file
     
     if not os.path.exists(log_path):
         st.warning(f'{log_file} not found. Logs will appear after running the respective process.')
