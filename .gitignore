@@ -1,2 +1,6 @@
-TASK.md
-/data/raw/*
+dataset/dataset-1/*
+dataset/dataset-2/*
+dataset/dataset-3/*
+.streamlit
+artifacts/*
+logs/*
