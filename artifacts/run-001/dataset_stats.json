@@ -1,0 +1,48 @@
+{
+  "AIIMS Delhi": {
+    "total_samples": 7153,
+    "dataset_id": "dataset-1",
+    "location": [
+      28.5672,
+      77.21
+    ],
+    "specialty": "Adult Neuro-Oncology",
+    "class_distribution": {
+      "pituitary": 1757,
+      "notumor": 2000,
+      "glioma": 1621,
+      "meningioma": 1775
+    },
+    "unmatched_folders": []
+  },
+  "NIMHANS Bengaluru": {
+    "total_samples": 6128,
+    "dataset_id": "dataset-2",
+    "location": [
+      12.9442,
+      77.5966
+    ],
+    "specialty": "Neuro Specialty",
+    "class_distribution": {
+      "glioma": 2852,
+      "meningioma": 1416,
+      "pituitary": 1860
+    },
+    "unmatched_folders": []
+  },
+  "Tata Memorial Mumbai": {
+    "total_samples": 6056,
+    "dataset_id": "dataset-3",
+    "location": [
+      19.0049,
+      72.8414
+    ],
+    "specialty": "Oncology Referral",
+    "class_distribution": {
+      "meningioma": 2004,
+      "pituitary": 2048,
+      "glioma": 2004
+    },
+    "unmatched_folders": []
+  }
+}
