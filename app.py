@@ -340,7 +340,7 @@ def main():
     # Sidebar Navigation
     st.sidebar.title('MediSync FL India')
     st.sidebar.markdown('---')
-    page = st.sidebar.radio('Navigate', ['Network Dashboard', 'Prediction Lab', 'Analytics Hub', 'Privacy & Compliance'])
+    page = st.sidebar.radio('Navigate', ['Network Dashboard', 'Prediction Lab', 'Analytics Hub'])
     
     if page == 'Network Dashboard':
         show_network_dashboard()
@@ -348,8 +348,6 @@ def main():
         show_prediction_lab()
     elif page == 'Analytics Hub':
         show_analytics_hub()
-    elif page == 'Privacy & Compliance':
-        show_privacy_compliance()
 
 
 def show_network_dashboard():
@@ -873,63 +871,6 @@ def show_training_logs():
         st.error(f'Error reading log file: {str(e)}')
         logger.error(f'Failed to read {log_path}: {str(e)}')
 
-
-def show_privacy_compliance():
-    st.title('🔒 Privacy & Compliance')
-    st.markdown('**Data governance and privacy-preserving mechanisms**')
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader('Privacy Guarantees')
-        st.markdown("""
-        ✅ **Differential Privacy (DP)** enabled  
-        - Privacy budget ε = 2.5  
-        - Gaussian noise added to gradients  
-        
-        ✅ **Secure Aggregation**  
-        - Encrypted model updates  
-        - No single party sees raw updates  
-        
-        ✅ **Local Training Only**  
-        - Patient data never leaves hospital premises  
-        - Only model parameters are shared  
-        """)
-    
-    with col2:
-        st.subheader('Regulatory Compliance')
-        st.markdown("""
-        📜 **DPDP Act 2023**  
-        - Data Principal consent obtained  
-        - Purpose limitation enforced  
-        - Right to erasure supported  
-        
-        🏥 **ABDM Guidelines**  
-        - Health data localization  
-        - Consent artefact management  
-        - Audit trails maintained  
-        
-        🔐 **Security Standards**  
-        - AES-256 encryption at rest  
-        - TLS 1.3 for data in transit  
-        - Regular security audits  
-        """)
-    
-    st.markdown('---')
-    
-    st.subheader('Data Flow Architecture')
-    st.image('https://via.placeholder.com/800x300.png?text=Federated+Learning+Data+Flow+Diagram', 
-             caption='Data never leaves hospital boundaries. Only encrypted model updates are aggregated.')
-    
-    st.markdown('---')
-    
-    st.subheader('Audit Log (Last 5 Events)')
-    audit_data = {
-        'Timestamp': ['2026-02-19 10:40:00', '2026-02-19 10:20:00', '2026-02-19 10:00:00', '2026-02-19 09:40:00', '2026-02-19 09:20:00'],
-        'Event': ['Model aggregation completed', 'NIMHANS uploaded gradients', 'Tata Memorial uploaded gradients', 'AIIMS Delhi completed epoch 12', 'Round 12 initiated'],
-        'Status': ['✅ Success', '✅ Success', '✅ Success', '✅ Success', '✅ Success']
-    }
-    st.dataframe(pd.DataFrame(audit_data), use_container_width=True)
 
 
 if __name__ == '__main__':

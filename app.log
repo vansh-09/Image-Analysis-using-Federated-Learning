@@ -328,3 +328,127 @@
 2026-02-19 18:29:23,788 - INFO - Application started
 2026-02-19 18:29:23,790 - INFO - Loaded dataset statistics
 2026-02-19 18:29:23,790 - INFO - Loaded model metadata
+2026-02-20 11:29:56,906 - INFO - Application started
+2026-02-20 11:29:56,911 - INFO - Loaded dataset statistics
+2026-02-20 11:29:56,912 - INFO - Loaded model metadata
+2026-02-20 11:29:57,224 - INFO - Application started
+2026-02-20 11:29:57,225 - INFO - Loaded dataset statistics
+2026-02-20 11:29:57,225 - INFO - Loaded model metadata
+2026-02-20 11:30:08,447 - INFO - Application started
+2026-02-20 11:30:08,453 - INFO - Loaded dataset statistics
+2026-02-20 11:30:08,453 - INFO - Loaded model metadata
+2026-02-20 11:30:10,819 - INFO - Application started
+2026-02-20 11:30:10,823 - INFO - Loaded dataset statistics
+2026-02-20 11:30:10,823 - INFO - Loaded model metadata
+2026-02-20 11:30:12,371 - INFO - Application started
+2026-02-20 11:30:12,375 - INFO - Loaded dataset statistics
+2026-02-20 11:30:12,375 - INFO - Loaded model metadata
+2026-02-20 11:30:16,211 - INFO - Application started
+2026-02-20 11:30:16,214 - INFO - Loaded label map
+2026-02-20 11:30:16,510 - INFO - Loaded trained model weights
+2026-02-20 11:30:16,512 - INFO - Loaded model metadata
+2026-02-20 11:30:16,513 - INFO - Loaded dataset statistics
+2026-02-20 11:30:23,775 - INFO - Application started
+2026-02-20 11:30:23,779 - INFO - Loaded model metadata
+2026-02-20 11:30:23,779 - INFO - Loaded dataset statistics
+2026-02-20 11:30:23,873 - INFO - Running inference on uploaded image
+2026-02-20 11:30:23,945 - INFO - Prediction: meningioma (51.42%)
+2026-02-20 11:30:47,753 - INFO - Application started
+2026-02-20 11:30:47,757 - INFO - Loaded dataset statistics
+2026-02-20 11:30:47,758 - INFO - Loaded model metadata
+2026-02-20 11:30:48,051 - INFO - Application started
+2026-02-20 11:30:48,052 - INFO - Loaded dataset statistics
+2026-02-20 11:30:48,052 - INFO - Loaded model metadata
+2026-02-20 11:31:24,294 - INFO - Application started
+2026-02-20 11:31:24,302 - INFO - Loaded dataset statistics
+2026-02-20 11:31:24,303 - INFO - Loaded model metadata
+2026-02-20 11:31:33,357 - INFO - Application started
+2026-02-20 11:31:33,360 - INFO - Loaded model metadata
+2026-02-20 11:31:33,361 - INFO - Loaded dataset statistics
+2026-02-20 11:31:46,965 - INFO - Application started
+2026-02-20 11:31:46,968 - INFO - Loaded model metadata
+2026-02-20 11:31:46,969 - INFO - Loaded dataset statistics
+2026-02-20 11:31:46,982 - INFO - Running inference on uploaded image
+2026-02-20 11:31:47,050 - INFO - Prediction: glioma (96.55%)
+2026-02-20 11:31:56,364 - INFO - Application started
+2026-02-20 11:31:56,367 - INFO - Loaded training history
+2026-02-20 11:31:56,368 - INFO - Loaded model metadata
+2026-02-20 11:31:56,368 - INFO - Loaded dataset statistics
+2026-02-20 11:32:33,688 - INFO - Application started
+2026-02-20 11:32:33,693 - INFO - Loaded dataset statistics
+2026-02-20 11:32:33,694 - INFO - Loaded model metadata
+2026-02-20 11:32:34,006 - INFO - Application started
+2026-02-20 11:32:34,008 - INFO - Loaded dataset statistics
+2026-02-20 11:32:34,008 - INFO - Loaded model metadata
+2026-02-20 11:39:41,787 - INFO - Application started
+2026-02-20 11:39:41,791 - INFO - Loaded dataset statistics
+2026-02-20 11:39:41,792 - INFO - Loaded model metadata
+2026-02-20 11:39:43,251 - INFO - Application started
+2026-02-20 11:39:43,255 - INFO - Loaded dataset statistics
+2026-02-20 11:39:43,256 - INFO - Loaded model metadata
+2026-02-20 11:39:43,526 - INFO - Application started
+2026-02-20 11:39:43,527 - INFO - Loaded dataset statistics
+2026-02-20 11:39:43,527 - INFO - Loaded model metadata
+2026-02-20 11:39:44,996 - INFO - Application started
+2026-02-20 11:39:45,000 - INFO - Loaded dataset statistics
+2026-02-20 11:39:45,000 - INFO - Loaded model metadata
+2026-02-20 11:39:46,781 - INFO - Application started
+2026-02-20 11:39:46,785 - INFO - Loaded dataset statistics
+2026-02-20 11:39:46,785 - INFO - Loaded model metadata
+2026-02-20 11:39:48,301 - INFO - Application started
+2026-02-20 11:39:48,303 - INFO - Loaded dataset statistics
+2026-02-20 11:39:48,304 - INFO - Loaded model metadata
+2026-02-20 11:39:48,659 - INFO - Application started
+2026-02-20 11:39:48,661 - INFO - Loaded dataset statistics
+2026-02-20 11:39:48,662 - INFO - Loaded model metadata
+2026-02-20 11:39:50,056 - INFO - Application started
+2026-02-20 11:39:50,059 - INFO - Loaded dataset statistics
+2026-02-20 11:39:50,059 - INFO - Loaded model metadata
+2026-02-20 11:39:51,122 - INFO - Application started
+2026-02-20 11:39:51,125 - INFO - Loaded dataset statistics
+2026-02-20 11:39:51,126 - INFO - Loaded model metadata
+2026-02-20 11:39:55,581 - INFO - Application started
+2026-02-20 11:39:55,584 - INFO - Loaded model metadata
+2026-02-20 11:39:55,585 - INFO - Loaded dataset statistics
+2026-02-20 11:40:19,368 - INFO - Application started
+2026-02-20 11:40:19,374 - INFO - Loaded model metadata
+2026-02-20 11:40:19,375 - INFO - Loaded dataset statistics
+2026-02-20 11:40:19,409 - INFO - Running inference on uploaded image
+2026-02-20 11:40:19,613 - INFO - Prediction: glioma (96.55%)
+2026-02-20 11:40:40,071 - INFO - Application started
+2026-02-20 11:40:40,075 - INFO - Loaded model metadata
+2026-02-20 11:40:40,076 - INFO - Loaded dataset statistics
+2026-02-20 11:40:40,095 - INFO - Running inference on uploaded image
+2026-02-20 11:40:40,181 - INFO - Prediction: glioma (96.55%)
+2026-02-20 11:40:59,145 - INFO - Application started
+2026-02-20 11:40:59,154 - INFO - Loaded training history
+2026-02-20 11:40:59,155 - INFO - Loaded model metadata
+2026-02-20 11:40:59,156 - INFO - Loaded dataset statistics
+2026-02-20 11:41:00,561 - INFO - Application started
+2026-02-20 11:41:00,563 - INFO - Loaded model metadata
+2026-02-20 11:41:00,564 - INFO - Loaded dataset statistics
+2026-02-20 11:41:02,674 - INFO - Application started
+2026-02-20 11:41:02,677 - INFO - Loaded dataset statistics
+2026-02-20 11:41:02,677 - INFO - Loaded model metadata
+2026-02-20 11:41:02,941 - INFO - Application started
+2026-02-20 11:41:02,942 - INFO - Loaded dataset statistics
+2026-02-20 11:41:02,942 - INFO - Loaded model metadata
+2026-02-20 14:07:14,379 - INFO - Application started
+2026-02-20 14:07:14,383 - INFO - Loaded dataset statistics
+2026-02-20 14:07:14,384 - INFO - Loaded model metadata
+2026-02-20 14:07:14,767 - INFO - Application started
+2026-02-20 14:07:14,768 - INFO - Loaded dataset statistics
+2026-02-20 14:07:14,769 - INFO - Loaded model metadata
+2026-02-20 14:07:16,176 - INFO - Application started
+2026-02-20 14:08:06,412 - INFO - Application started
+2026-02-20 14:08:06,418 - INFO - Loaded dataset statistics
+2026-02-20 14:08:06,419 - INFO - Loaded model metadata
+2026-02-20 14:08:06,854 - INFO - Application started
+2026-02-20 14:08:06,856 - INFO - Loaded dataset statistics
+2026-02-20 14:08:06,856 - INFO - Loaded model metadata
+2026-02-20 14:08:16,817 - INFO - Application started
+2026-02-20 14:08:16,820 - INFO - Loaded dataset statistics
+2026-02-20 14:08:16,820 - INFO - Loaded model metadata
+2026-02-20 14:08:17,140 - INFO - Application started
+2026-02-20 14:08:17,143 - INFO - Loaded dataset statistics
+2026-02-20 14:08:17,143 - INFO - Loaded model metadata
