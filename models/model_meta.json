@@ -8,10 +8,7 @@
     "AIIMS Delhi": {
       "total_samples": 7153,
       "dataset_id": "dataset-1",
-      "location": [
-        28.5672,
-        77.21
-      ],
+      "location": [28.5672, 77.21],
       "specialty": "Adult Neuro-Oncology",
       "class_distribution": {
         "pituitary": 1757,
@@ -24,10 +21,7 @@
     "NIMHANS Bengaluru": {
       "total_samples": 6128,
       "dataset_id": "dataset-2",
-      "location": [
-        12.9442,
-        77.5966
-      ],
+      "location": [12.9442, 77.5966],
       "specialty": "Neuro Specialty",
       "class_distribution": {
         "glioma": 2852,
@@ -39,10 +33,7 @@
     "Tata Memorial Mumbai": {
       "total_samples": 6056,
       "dataset_id": "dataset-3",
-      "location": [
-        19.0049,
-        72.8414
-      ],
+      "location": [19.0049, 72.8414],
       "specialty": "Oncology Referral",
       "class_distribution": {
         "meningioma": 2004,
@@ -58,6 +49,7 @@
   "test_samples": 2900,
   "metrics": {
     "test_accuracy": 0.7824137931034483,
+    "best_val_accuracy": 0.7824137931034483,
     "avg_f1": 0.8160429560038375,
     "avg_precision": 0.8218265059419549,
     "avg_recall": 0.8133725796621126,
@@ -88,30 +80,10 @@
       }
     },
     "confusion_matrix": [
-      [
-        749,
-        157,
-        61,
-        3
-      ],
-      [
-        251,
-        513,
-        19,
-        3
-      ],
-      [
-        105,
-        28,
-        708,
-        0
-      ],
-      [
-        0,
-        3,
-        1,
-        299
-      ]
+      [749, 157, 61, 3],
+      [251, 513, 19, 3],
+      [105, 28, 708, 0],
+      [0, 3, 1, 299]
     ],
     "best_val_accuracy": 0.7972413793103448
   }

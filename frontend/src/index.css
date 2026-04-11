@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply box-border;
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply font-space text-ink bg-gradient-to-br from-paper via-mist to-paper;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-fraunces;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-mist;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate rounded-full hover:bg-sky;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  @apply transition-all duration-300 ease-out;
+}
+
+/* Glass morphism effect */
+.glass {
+  @apply bg-mist/80 border border-slate/20 backdrop-blur-xl;
+}
+
+.glass-light {
+  @apply bg-mist/50 border border-slate/30 backdrop-blur-md;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-gradient-to-r from-teal to-sky bg-clip-text text-transparent;
+}
+
+/* Animated gradient */
+.animated-gradient {
+  @apply bg-gradient-to-r from-teal via-sky to-amber animate-pulse;
+}
+
+/* Glow effect */
+.glow {
+  @apply shadow-lg shadow-teal/20;
+}
+
+.glow-sky {
+  @apply shadow-lg shadow-sky/20;
+}
+
+.glow-amber {
+  @apply shadow-lg shadow-amber/20;
+}
