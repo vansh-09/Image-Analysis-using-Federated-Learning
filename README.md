@@ -4,6 +4,7 @@
 
 **Live Demo:** [medisync-fl.streamlit.app](https://medisync-fl.streamlit.app) &nbsp;|&nbsp; **Stack:** Python · PyTorch · Streamlit · ResNet18 · FedAvg
 
+
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=flat-square&logo=python)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red?style=flat-square&logo=pytorch)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat-square&logo=streamlit)
