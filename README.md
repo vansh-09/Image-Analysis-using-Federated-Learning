@@ -13,7 +13,7 @@
 
 ---
 
-## Table of Contents
+## Model Details
 
 - [Why This Project](#why-this-project)
 - [What Is Federated Learning](#what-is-federated-learning)
@@ -328,12 +328,14 @@ cd Image-Analysis-using-Federated-Learning
 ### Step 2 — Create a Virtual Environment
 
 **macOS / Linux**
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
 **Windows (PowerShell)**
+
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
