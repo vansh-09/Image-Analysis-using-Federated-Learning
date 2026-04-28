@@ -4,7 +4,6 @@ import {
   Line,
   BarChart,
   Bar,
-  HeatMap,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -14,7 +13,13 @@ import {
 } from 'recharts';
 import { TrendingUp, Award, Zap } from 'lucide-react';
 import api from '../api/client';
-import { StatCard, HeroSection, Card, LoadingSpinner, Alert } from '../components/UI';
+import {
+  StatCard,
+  HeroSection,
+  Card,
+  LoadingSpinner,
+  Alert,
+} from '../components/UI';
 import { StaggerContainer, FadeIn } from '../components/Animations';
 import { formatNumber } from '../lib/utils';
 
@@ -51,7 +56,7 @@ interface AnalyticsData {
   class_distribution: Record<string, number>;
 }
 
-const COLORS = ['#2dd4bf', '#38bdf8', '#fbbf24', '#34d399', '#f43f5e'];
+// palette kept in git history; remove unused local constant to silence TS
 
 export const AnalyticsHub: React.FC = () => {
   const [data, setData] = useState<AnalyticsData | null>(null);
@@ -294,7 +299,7 @@ export const AnalyticsHub: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {classMetrics.map((metric, idx) => (
+                {classMetrics.map((metric) => (
                   <tr
                     key={metric.class}
                     className="border-b border-slate/10 hover:bg-slate/10 transition-smooth"

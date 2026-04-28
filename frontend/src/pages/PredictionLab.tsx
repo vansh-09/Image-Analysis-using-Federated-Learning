@@ -8,20 +8,17 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  LineChart,
-  Line,
 } from 'recharts';
 import { Upload, Download, Zap, AlertCircle } from 'lucide-react';
 import api from '../api/client';
 import {
-  StatCard,
   HeroSection,
   Card,
   Button,
   LoadingSpinner,
   Alert,
 } from '../components/UI';
-import { FadeIn, StaggerContainer } from '../components/Animations';
+import { FadeIn } from '../components/Animations';
 import { validateImage, calculateImageStats, formatNumber } from '../lib/utils';
 
 interface PredictionResult {

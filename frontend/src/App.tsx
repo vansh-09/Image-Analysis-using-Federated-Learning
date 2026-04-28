@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { BarChart3, Zap, TrendingUp } from 'lucide-react';
 import { Layout } from './components/Layout';
 import { NetworkDashboard } from './pages/NetworkDashboard';
 import { PredictionLab } from './pages/PredictionLab';

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   PieChart,
@@ -12,14 +10,18 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from 'recharts';
 import { Building2, TrendingUp, Users, Target } from 'lucide-react';
 import api from '../api/client';
-import { StatCard, HeroSection, Card, LoadingSpinner, Alert } from '../components/UI';
+import {
+  StatCard,
+  HeroSection,
+  Card,
+  LoadingSpinner,
+  Alert,
+} from '../components/UI';
 import { StaggerContainer, FadeIn } from '../components/Animations';
-import { formatPercent } from '../lib/utils';
 
 interface DashboardData {
   total_hospitals: number;
@@ -240,7 +242,7 @@ export const NetworkDashboard: React.FC = () => {
         <Card title="Hospital Network Details">
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {Object.entries(data.hospitals).map(
-              ([name, hospital]: [string, any], idx) => (
+              ([name, hospital]: [string, any]) => (
                 <motion.button
                   key={name}
                   whileHover={{ x: 4 }}

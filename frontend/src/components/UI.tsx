@@ -32,7 +32,8 @@ export const StatCard: React.FC<StatCardProps> = ({
       whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 300 }}
       className={cn(
-        'glass rounded-2xl p-6 border-l-4 border-teal',
+        'glass rounded-2xl p-6 border-l-4',
+        gradientMap[gradient],
         'hover:shadow-lg hover:shadow-teal/20 transition-smooth'
       )}
     >
@@ -136,7 +137,7 @@ export const Button: React.FC<ButtonProps> = ({
       whileTap={{ scale: 0.98 }}
       disabled={loading}
       className={finalClassName}
-      {...props}
+      {...(props as any)}
     >
       {loading && <span className="animate-spin">⏳</span>}
       {children}
