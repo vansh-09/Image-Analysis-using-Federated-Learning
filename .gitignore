@@ -20,3 +20,5 @@ runtime.txt
 
 /artifacts/*
 
+
+/frontend/node_modules/
